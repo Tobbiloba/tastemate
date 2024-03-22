@@ -12,7 +12,6 @@ import {
 import React, {useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
-import Feather from 'react-native-vector-icons/Feather';
 import FilterComponent from '../components/FilterComponent';
 import MenuCard from '../components/MenuCard';
 import { menus, tabs } from '../data';
@@ -29,16 +28,14 @@ const HomeScreen = ({navigation}) => {
     setInput(text);
   };
 
-  const handleFilter = () => {
-    // console.log(selectedMenus);
-    if (selectedMenus.length === 0) {
+  const handleFilter = (selected) => {
+    if (selected.length === 0) {
       setData(menus);
       return menus;
     } else {
-      console.log(selectedMenus);
-      console.log(menus.filter(menu => selectedMenus.includes(menu.category)));
-      setData(menus.filter(menu => selectedMenus.includes(menu.category)));
-      return menus.filter(menu => selectedMenus.includes(menu.category));
+      console.log(menus.filter(menu => selected.includes(menu.category)));
+      setData(menus.filter(menu => selected.includes(menu.category)));
+      return menus.filter(menu => selected.includes(menu.category));
     }
   };
 
@@ -57,16 +54,18 @@ const HomeScreen = ({navigation}) => {
           </Text>
 
           <View style={styles.inputContainer}>
+          <TouchableOpacity onPress={() => handleFilter([input])}>
             <AntDesign
               name="search1"
               color="#9ca3af"
               size={25}
               style={{paddingHorizontal: 10}}
             />
+            </TouchableOpacity>
             <TextInput
               style={styles.input}
               value={input}
-              onChange={handleChange}
+              onChangeText={newText => setInput(newText)}
               placeholder="Search"
             />
             <TouchableOpacity onPress={() => setShowFilter(true)}>
@@ -113,7 +112,8 @@ const HomeScreen = ({navigation}) => {
           </View>
 
           <View style={{marginTop: 20}}>
-            <FlatList
+            {
+              data.length > 0 ? <FlatList
               data={data}
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -127,7 +127,8 @@ const HomeScreen = ({navigation}) => {
                 />
               )}
               keyExtractor={item => item.id.toString()}
-            />
+            /> : <Text style={{color: '#164e63', textAlign: 'center', marginTop: 20}}>No menu found</Text>
+            }
           </View>
         </ScrollView>
       ) : (
@@ -162,6 +163,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    color: 'black'
   },
   rotate: {
     transform: [{rotate: '90deg'}],

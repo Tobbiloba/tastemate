@@ -103,7 +103,7 @@ const FilterComponent = ({
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => (handleFilter(), setState(false))}
+          onPress={() => (handleFilter(selectedMenus), setState(false))}
           style={{
             backgroundColor: '#1e293b',
             height: 60,
